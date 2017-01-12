@@ -25,6 +25,6 @@ test:
 
 production:
   <<: *default
-  database: d7isdv18pov82t
-  username: jlpeahvqnbkyby
-  password: af1529f845751f90c28c213bd9b19fcd6851671deab8582b0214c2450f514ba5
+  database: teambalancer_production
+  username: teambalancer
+  password: <%= ENV['TEAMBALANCER_DATABASE_PASSWORD'] %>
