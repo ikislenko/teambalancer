@@ -10,7 +10,7 @@ development:
   database: teambalancer_development
 
   username: rails_dev
-  password:
+  password: Qwerty1234
   host: localhost
   port: 5432
 
@@ -19,7 +19,7 @@ test:
   database: teambalancer_test
 
   username: rails_dev
-  password: 
+  password: Qwerty1234
   host: localhost
   port: 5432
 
