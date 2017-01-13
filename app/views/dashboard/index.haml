@@ -1,1 +1,64 @@
-test
+.container(data-ng-app="teambalancer")
+  -# Users block
+  .row
+    .col-md-6
+      %p Users
+      %hr
+      %div(ng-controller="UserCtrl")
+        %form.form-inline(ng-submit="addUser()")
+          .col-md-6
+            .form-group
+              %input.form-control{placeholder: "Name", type: "text", ng_model: "newUser.firstname"}
+          .col-md-3
+            .form-group
+              %input.form-control.story-points{placeholder: "Story Points", type: "number", min: "0", ng_model: "newUser.story_points"}
+          .col-md-2
+            %button.btn.btn-primary{type: "submit"} Add new
+        %hr
+        .row
+          .col-md-6
+            Name
+          .col-md-3
+            Story Points
+        %hr
+        %ul.col-md-12.list
+          %li(ng-repeat="user in users")
+            .row
+              .col-md-6
+                {{user.firstname}}
+              .col-md-3
+                {{user.story_points}}
+              .col-md-3
+                %button.btn.btn-primary{ng_click: "remove(user)"} -
+
+    -# Tasks block
+    .col-md-6
+      %p Tasks
+      %hr
+      %div(ng-controller="TaskCtrl")
+        %form.form-inline(ng-submit="addTask()")
+          .col-md-6
+            .form-group
+              %input.form-control{placeholder: "Title", type: "text", ng_model: "newTask.title"}
+          .col-md-3
+            .form-group
+              %input.form-control.story-points{placeholder: "Story Points", type: "number", min: "0", ng_model: "newTask.story_points"}
+          .col-md-2
+            %button.btn.btn-primary{type: "submit"} Add new
+        %hr
+        .row
+          .col-md-6
+            Title
+          .col-md-3
+            Story Points
+        %hr
+        %ul.col-md-12.list
+          %li(ng-repeat="task in tasks")
+            .row
+              .col-md-6
+                {{task.title}}
+              .col-md-3
+                {{task.story_points}}
+              .col-md-3
+                %button.btn.btn-primary{ng_click: "remove(task)"} -
+-# Rebalance block
