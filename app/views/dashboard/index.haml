@@ -1,64 +1,94 @@
-.container(data-ng-app="teambalancer")
+.container-fluid(data-ng-app="teambalancer")
   -# Users block
   .row
-    .col-md-6
-      %p Users
-      %hr
-      %div(ng-controller="UserCtrl")
-        %form.form-inline(ng-submit="addUser()")
-          .col-md-6
-            .form-group
-              %input.form-control{placeholder: "Name", type: "text", ng_model: "newUser.firstname"}
-          .col-md-3
-            .form-group
-              %input.form-control.story-points{placeholder: "Story Points", type: "number", min: "0", ng_model: "newUser.story_points"}
-          .col-md-2
-            %button.btn.btn-primary{type: "submit"} Add new
-        %hr
-        .row
-          .col-md-6
-            Name
-          .col-md-3
-            Story Points
-        %hr
-        %ul.col-md-12.list
-          %li(ng-repeat="user in users")
-            .row
-              .col-md-6
-                {{user.firstname}}
-              .col-md-3
-                {{user.story_points}}
-              .col-md-3
-                %button.btn.btn-primary{ng_click: "remove(user)"} -
+    .col-md-3.left-menu
+      .card
+        %h3.card-header Users
+        .card-block
+          %p.card-text
+            %div(ng-controller="UserCtrl")
+              %form.form-inline(ng-submit="addUser()")
+                .col-md-4
+                  .form-group
+                    %input.form-control{placeholder: "Name", type: "text", ng_model: "newUser.name", required: "required"}
+                .col-md-4
+                  .form-group
+                    %input.form-control.story-points{placeholder: "Story Points", type: "number", min: "0", ng_model: "newUser.story_points", required: "required"}
+                .col-md-2
+                  %button.btn.btn-primary{type: "submit"} Add new
+              %hr
+              .row.head
+                .col-md-3
+                  Name
+                .col-md-5
+                  Story Points
+                .col-md-2
+              %hr
+              %ul.col-md-12.list
+                %li(ng-repeat="user in users")
+                  .row(ng-if="user.tasks.length < 1")
+                    .col-md-4
+                      {{user.name}}
+                    .col-md-4
+                      {{user.story_points}}
+                    .col-md-2
+                      %button.btn.btn-primary{ng_click: "remove(user)"} X
 
-    -# Tasks block
-    .col-md-6
-      %p Tasks
-      %hr
-      %div(ng-controller="TaskCtrl")
-        %form.form-inline(ng-submit="addTask()")
-          .col-md-6
-            .form-group
-              %input.form-control{placeholder: "Title", type: "text", ng_model: "newTask.title"}
-          .col-md-3
-            .form-group
-              %input.form-control.story-points{placeholder: "Story Points", type: "number", min: "0", ng_model: "newTask.story_points"}
-          .col-md-2
-            %button.btn.btn-primary{type: "submit"} Add new
-        %hr
-        .row
-          .col-md-6
-            Title
-          .col-md-3
-            Story Points
-        %hr
-        %ul.col-md-12.list
-          %li(ng-repeat="task in tasks")
+      -# Tasks block
+      .card
+        %h3.card-header Tasks
+        .card-block
+          %p.card-text
+            %div(ng-controller="TaskCtrl")
+              %form.form-inline(ng-submit="addTask()")
+                .col-md-4
+                  .form-group
+                    %input.form-control{placeholder: "Title", type: "text", ng_model: "newTask.title", required: "required"}
+                .col-md-4
+                  .form-group
+                    %input.form-control.story-points{placeholder: "Story Points", type: "number", min: "0", ng_model: "newTask.story_points", required: "required"}
+                .col-md-2
+                  %button.btn.btn-primary{type: "submit"} Add new
+              %hr
+              .row.head
+                .col-md-3
+                  Title
+                .col-md-5
+                  Story Points
+                .col-md-2
+              %hr
+              %ul.col-md-12.list
+                %li(ng-repeat="task in tasks")
+                  .row(ng-if="task.user_id == null")
+                    .col-md-4
+                      {{task.title}}
+                    .col-md-4
+                      {{task.story_points}}
+                    .col-md-2
+                      %button.btn.btn-primary{ng_click: "remove(task)"} X
+    -# Rebalance block
+    .col-md-9(ng-controller="DashboardCtrl")
+      .card.balanced
+        %h3.card-header
+          %button.btn.btn-primary(ng-click="balance()") Balance
+          %button.btn.btn-primary(ng-click="clear()") Clear
+        .card-block
+          %p.card-text
             .row
-              .col-md-6
-                {{task.title}}
-              .col-md-3
-                {{task.story_points}}
-              .col-md-3
-                %button.btn.btn-primary{ng_click: "remove(task)"} -
--# Rebalance block
+              .col-md-6(ng-repeat="user in users")
+                %div(ng-if="user.tasks.length > 0")
+                  .card
+                    %h3.card-header
+                      {{user.name}} Story points: {{user.story_points}}
+                    .card-block
+                      %p.card-text
+                        %ul.list
+                          %li(ng-repeat="task in user.tasks")
+                            .row
+                              .col-md-4
+                                {{task.title}}
+                              .col-md-4
+                                {{task.story_points}}
+                    .card-footer.text-muted
+                      Total story points:  {{user.tasks | totalPoints}}
+                  %br

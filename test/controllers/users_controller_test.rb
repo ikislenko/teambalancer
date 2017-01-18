@@ -10,32 +10,10 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should get new" do
-    get new_user_url
-    assert_response :success
-  end
-
   test "should create user" do
     assert_difference('User.count') do
-      post users_url, params: { user: { firstname: @user.firstname, lastname: @user.lastname, story_points: @user.story_points } }
+      post users_url, params: { user: { name: @username, story_points: @user.story_points } }
     end
-
-    assert_redirected_to user_url(User.last)
-  end
-
-  test "should show user" do
-    get user_url(@user)
-    assert_response :success
-  end
-
-  test "should get edit" do
-    get edit_user_url(@user)
-    assert_response :success
-  end
-
-  test "should update user" do
-    patch user_url(@user), params: { user: { firstname: @user.firstname, lastname: @user.lastname, story_points: @user.story_points } }
-    assert_redirected_to user_url(@user)
   end
 
   test "should destroy user" do
@@ -43,6 +21,6 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
       delete user_url(@user)
     end
 
-    assert_redirected_to users_url
+    assert_response :no_content
   end
 end

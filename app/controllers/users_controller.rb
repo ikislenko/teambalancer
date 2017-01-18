@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
     @users = User.all
-    render json: @users.to_json
+    render json: @users.to_json(:include => :tasks)
   end
 
   # GET /users/1
@@ -27,21 +27,12 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     @user = User.create(user_params)
-    render json: @user.to_json
+    render json: @user.to_json(:include => :tasks)
   end
 
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
-    respond_to do |format|
-      if @user.update(user_params)
-        format.html { redirect_to @user, notice: 'User was successfully updated.' }
-        format.json { render :show, status: :ok, location: @user }
-      else
-        format.html { render :edit }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
-    end
   end
 
   # DELETE /users/1
@@ -58,6 +49,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.permit(:firstname, :story_points)
+      params.permit(:name, :story_points)
     end
 end

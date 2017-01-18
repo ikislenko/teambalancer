@@ -1,39 +1,71 @@
 app = angular.module('teambalancer', ["ngResource"])
 
-app.controller 'UserCtrl', ($scope, $resource) ->
-    User = $resource("/users/:id", {id: "@id"}, {
-      update: {method: "PUT"}
-      delete: {method: "delete"}
-      })
-    $scope.users = User.query()
+# Factories
+# ######################################
+app.factory "User", ($resource) ->
+  $resource("/users/:id", {id: "@id"}, {
+    update: {method: "PUT"}
+    delete: {method: "delete"}
+    })
+
+app.factory "Task", ($resource) ->
+  $resource("/tasks/:id", {id: "@id"}, {
+    update: {method: "PUT"}
+    delete: {method: "delete"}
+    })
+
+app.factory "Rebalance", ($resource) ->
+  $resource("/rebalance", {}, {show: {method: "GET"}})
+
+app.factory "Clear", ($resource) ->
+  $resource("/clear", {}, {show: {method: "GET"}})
+# #####################################
+
+# Filters
+# ###################################
+app.filter 'totalPoints', ->
+  (input) ->
+    result = 0
+    angular.forEach input, ((value, key) ->
+      result += value.story_points
+    )
+    result
+# ####################################
+
+#  Controllers
+# ####################################
+app.controller 'UserCtrl', ($scope, $rootScope, User) ->
+    $rootScope.users = User.query()
 
     $scope.addUser = ->
-      return if $scope.newUser == undefined
       user = User.save($scope.newUser)
-      $scope.users.push(user)
+      $rootScope.users.push(user)
       $scope.newUser = {}
-      user = {}
 
     $scope.remove = (user) ->
       if confirm("Sure to delete?")
         user.$remove ->
-            $scope.users = User.query()
+            $rootScope.users = User.query()
 
-app.controller 'TaskCtrl', ($scope, $resource) ->
-    Task = $resource("/tasks/:id", {id: "@id"}, {
-      update: {method: "PUT"}
-      delete: {method: "delete"}
-      })
-    $scope.tasks = Task.query()
+app.controller 'DashboardCtrl', ($scope, $rootScope, Task, Rebalance, Clear) ->
+    $scope.balance = ->
+      $rootScope.users = Rebalance.query()
+      $rootScope.tasks = []
+
+    $scope.clear = ->
+      window.location.reload()
+      $rootScope.users = Clear.query()
+      $rootScope.tasks = Task.query()
+
+app.controller 'TaskCtrl', ($scope, $rootScope, Task) ->
+    $rootScope.tasks = Task.query()
 
     $scope.addTask = ->
-      return if $scope.newTask == undefined
       task = Task.save($scope.newTask)
-      $scope.tasks.push(task)
+      $rootScope.tasks.push(task)
       $scope.newTask = {}
-      task = {}
 
     $scope.remove = (task) ->
       if confirm("Sure to delete?")
         task.$remove ->
-            $scope.tasks = Task.query()
+            $rootScope.tasks = Task.query()
