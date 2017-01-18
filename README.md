@@ -5,13 +5,14 @@ application up and running.
 
 Things you may want to cover:
 
-* Ruby 2.3.3
-  Rails 5
+* Ruby version 2.3.3
+* Rails version 5
 
-* Configuration
-
-* Database creation
+* Clone app from github https://github.com/ikislenko/teambalancer.git
+* Go to teambalancer folder and run bundle
 
 * Database initialization
-
-* Run test rails s
+- Edit database.yml for your db credentials
+- Run rake db:create rake db:migrate and rake db:seed for creating fakes data.
+* Run test
+- For run tests use rails s in console.
